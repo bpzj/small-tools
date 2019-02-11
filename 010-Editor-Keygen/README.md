@@ -9,6 +9,8 @@ It is for **EDUCATIONAL PURPOSES** only.
 
 ## Features
 
+Original project:  https://github.com/iDone/010-Editor-Keygen
+
 1. Arbitrary usernames are supported
 
 2. License expiration date can be customized (any date between the next day and December 31, 3000)
