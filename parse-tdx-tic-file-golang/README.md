@@ -1,3 +1,6 @@
+# 原始地址
+https://github.com/datochan/ParseTicFile
+
 # ParseTicFile
 通达信tic文件格式解析
 
