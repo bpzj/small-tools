@@ -1,0 +1,77 @@
+//------------------------------------------------
+//--- 010 Editor v7.0.2 Binary Template
+//
+//      File: TdxTicFileTemplate
+//   Authors: datochan
+//   Version: 0.0.1
+//------------------------------------------------
+
+typedef struct (int tradeCount, int VolCount) {
+    DWORD tradeData[tradeCount] <format=hex>;
+    BYTE  volumeData[VolCount] <format=hex>;
+
+} TickItemDetail <optimize=false>;
+
+typedef struct (int detailSize){
+    DWORD  dateTime;
+    WORD   count;     // ((WORD)+1)*16作为解压后数据的大小
+    WORD   volOffset  <format=hex>;  // 成交量的偏移地址
+    WORD   volSize    <format=hex>;  // 成交量数据的大小
+    WORD   type       <read=ReadTickType, comment="交易方向0=buy;1=sell;2=unknown">; // 还需要再处理
+    DWORD  price      <read=ReadTickPrice, comment="成交价格">;
+    DWORD  volume;     // 成交
+    TickItemDetail detail((detailSize-volSize)/sizeof(DWORD), volSize);
+} TickItem <optimize=false>;
+
+typedef struct {
+    BYTE   market;    // 市场类别
+    char   code[7];   // 股票代码
+    DWORD  date;      // 日期
+    DWORD  tickSize  <format=hex, comment="分笔成交明细大小">; 
+    DWORD  unknown   <format=hex>;
+    TickItem item(tickSize-0x14);
+}StockTick <optimize=false>;
+
+typedef struct {
+    WORD        stockCount;
+    StockTick   stockTickList[stockCount];
+} TickFileData <optimize=false>;
+
+/**
+ * 设置交易方向
+ */
+string ReadTickType(WORD &type) {
+    local string result = "";
+    SPrintf(result, "%d", type >> 0x0F);
+    return result;
+}
+
+/**
+ * 设置价格信息
+ **/
+string ReadTickPrice(DWORD &price) {
+    local string result = "";
+    SPrintf(result, "%.2f", price * 0.01);
+    return result;
+}
+
+/**
+ * 设置相对时间
+ **/
+string SetTradeTime(int timeVal) {
+    local string strOut = "";
+    local int result = 0x23A;
+    if (timeVal >= 0 && timeVal <= 0x78) {
+        result += timeVal;
+    } else if (timeVal <= 0xF0) {
+        result = 0x294 + timeVal;
+    }
+
+    SPrintf(strOut, "%02d:%02d", result/60%24, result%60);
+    return strOut;
+}
+
+LittleEndian(); 
+SetBackColor( cLtGray );
+
+TickFileData item;
