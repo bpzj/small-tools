@@ -34,7 +34,12 @@ left, top, right, bottom = win32gui.GetWindowRect(hwnd)
 print(left, top, right, bottom)
 
 # 屏幕坐标到客户端坐标
+# 输入框坐标
 print(win32gui.ScreenToClient(hwnd, (1215, 770)))
+# 发送按钮坐标
+print(win32gui.ScreenToClient(hwnd, (1782, 832)))
+# 最小化
+print(win32gui.ScreenToClient(hwnd, (1755, 75)))
 
 # win32api.keybd_event(0x0D, hwnd, 0, 0)
 # 这样就是在记事本里按enter键了, 微信不行
@@ -42,9 +47,9 @@ print(win32gui.ScreenToClient(hwnd, (1215, 770)))
 # win32api.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, 2080193)
 # win32api.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, 2080193)
 # win32gui.SendMessage(hwnd, win32con.WM_CHAR, 22, 2080193)
-# win32gui.SendMessage(hwnd, win32con.WM_PASTE, 0, 0)
+win32gui.SendMessage(hwnd, win32con.WM_PASTE, 0, 0)
 win32gui.SendMessage(hwnd, win32con.WM_SETTEXT, None, 'hello')
-
+print(win32api.VkKeyScan("v"))
 
 # win32gui.PostMessage(handle, win32con.WM_PASTE, 0, 0)  # 向窗口发送剪贴板内容
 
