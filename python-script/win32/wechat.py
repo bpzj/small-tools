@@ -131,7 +131,6 @@ def wechat_send_msg(hwd, content):
 
     # 点击发送消息
     # click_position(hwd, 847, 782, 1)
-    time.sleep(1)
 
 
 if __name__ == '__main__':
