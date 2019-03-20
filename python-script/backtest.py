@@ -1,11 +1,11 @@
-from QUANTAXIS.QAARP.QAStrategy import QA_Strategy
 from QUANTAXIS.QAARP.QAAccount import QA_Account
 from QUANTAXIS.QAUtil.QAParameter import (AMOUNT_MODEL, MARKET_TYPE,
                                           FREQUENCE, ORDER_DIRECTION,
                                           ORDER_MODEL, RUNNING_ENVIRONMENT)
-
-
-import random
+from QUANTAXIS.QAARP.QARisk import QA_Risk
+from QUANTAXIS.QAApplication.QABacktest import QA_Backtest
+from QUANTAXIS.QAUtil.QALogs import QA_util_log_info
+from QUANTAXIS.QAUtil.QAParameter import FREQUENCE, MARKET_TYPE
 
 
 class MAMINT0Strategy(QA_Account):
@@ -63,13 +63,6 @@ class MAMINT0Strategy(QA_Account):
             pass
 
 
-from QUANTAXIS.QAARP.QARisk import QA_Risk
-from QUANTAXIS.QAARP.QAUser import QA_User
-from QUANTAXIS.QAApplication.QABacktest import QA_Backtest
-from QUANTAXIS.QAUtil.QALogs import QA_util_log_info
-from QUANTAXIS.QAUtil.QAParameter import FREQUENCE, MARKET_TYPE
-
-
 class Backtest(QA_Backtest):
     '''
     多线程模式回测示例
@@ -77,7 +70,7 @@ class Backtest(QA_Backtest):
 
     def __init__(self, market_type, frequence, start, end, code_list, commission_fee):
         super().__init__(market_type,  frequence, start, end, code_list, commission_fee)
-        self.account = self.portfolio.add_account( MAMINT0Strategy(user_cookie=self.user.user_cookie, portfolio_cookie= self.portfolio.portfolio_cookie))
+        self.account = self.portfolio.add_account(MAMINT0Strategy(user_cookie=self.user.user_cookie, portfolio_cookie= self.portfolio.portfolio_cookie))
 
     def after_success(self):
         QA_util_log_info(self.account.history_table)
@@ -91,11 +84,10 @@ class Backtest(QA_Backtest):
         print(risk.profit_construct)
 
 
-import QUANTAXIS as QA
 backtest = Backtest(market_type=MARKET_TYPE.STOCK_CN,
                     frequence=FREQUENCE.ONE_MIN,
                     start='2018-11-01',
-                    end='2018-12-10',
+                    end='2018-11-02',
                     code_list=['000001'],
                     commission_fee=0.00015)
 backtest.start_market()
