@@ -149,8 +149,8 @@ if __name__ == '__main__':
         exit()
 
     # 将窗口调到前台，激活
-    # win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
-    # win32gui.SetForegroundWindow(hwnd)
+    win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
+    win32gui.SetForegroundWindow(hwnd)
 
     # 屏幕坐标到客户端坐标
     # print(win32gui.ScreenToClient(hwnd, (1206, 744)))
