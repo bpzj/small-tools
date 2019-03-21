@@ -103,10 +103,9 @@ def wechat_send_msg(handle, content):
     pos = get_right_click_pos(handle)
     # 方法一：
     # 模拟单击输入框，然后输入 ctrl v
-    click_left_at_pos(pos)
-    time.sleep(0.1)
+    click_left_at_pos(pos, sleep_time=0.1)
     click_ctrl_v()
-    time.sleep(0.2)
+    time.sleep(0.1)
 
     #
     # 方法二：
@@ -148,6 +147,6 @@ if __name__ == '__main__':
     right_click = get_right_click_pos(hwnd)
     print(right_click)
 
-    for i in range(1, 10):
+    for i in range(0, 2):
         wechat_send_msg(hwnd, "1")
 
