@@ -6,20 +6,16 @@ pro = ts.pro_api()
 data = pro.query('stock_basic', exchange='', list_status='L', fields='ts_code, symbol, name, industry, list_date')
 
 # 上市日期 15年之后
-filter_year = data.loc[data.list_date >= '20150101']
+filter_year = data.loc[data.list_date >= '20150630']
 # 行业
 
 
 # 获取信息： 所在城市
 stocks = pro.stock_company(exchange='SSE', fields='ts_code, city, main_business')
 stocks = stocks.append(pro.stock_company(exchange='SZSE', fields='ts_code, city, main_business'), ignore_index=True)
-
 # 过滤城市
 cities = ['北京市', '上海市', '深圳市', '杭州市']
 filter_city = stocks.loc[stocks.city.isin(cities)]
-# codes = stocks.query('area == "上海"')
-
-
 
 
 # 流通值范围
