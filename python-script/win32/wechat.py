@@ -25,8 +25,11 @@ def send_keys(hwd, *args):
     """
     定义组合按键
     """
+    args = list(args)
     for arg in args:
         win32api.SendMessage(hwd, win32con.WM_KEYDOWN, arg, 0)
+
+    args.reverse()
     for arg in args:
         win32api.SendMessage(hwd, win32con.WM_KEYUP, arg, 0)
 
@@ -73,11 +76,14 @@ def click_left_at_pos(position, sleep_time=0.1):
     time.sleep(sleep_time)
 
 
-def click_input_word(input_words=''):
-    for word in input_words:
-        win32api.keybd_event(win32api.VkKeyScan(word), 0, 0, 0)
-        win32api.keybd_event(win32api.VkKeyScan(word), 0, win32con.KEYEVENTF_KEYUP, 0)
-        time.sleep(0.1)
+def click_ctrl_v():
+    """
+    定义组合按键 使用 keybd_event api，在 SendMessage api无效时使用
+    """
+    win32api.keybd_event(win32con.VK_LCONTROL, 0, 0, 0)
+    win32api.keybd_event(win32api.VkKeyScan('v'), 0, 0, 0)
+    win32api.keybd_event(win32api.VkKeyScan('v'), 0, win32con.KEYEVENTF_KEYUP, 0)
+    win32api.keybd_event(win32con.VK_LCONTROL, 0, win32con.KEYEVENTF_KEYUP, 0)
 
 
 def click_ctrl_v():
@@ -97,19 +103,23 @@ def wechat_send_msg(handle, content):
     :param content
     :return:
     """
-    set_text(content)
 
     # 点击聊天文本框，SendMessage 方法模拟鼠标点击，对微信无效果，使用 mouse_event 方法
     pos = get_right_click_pos(handle)
-    # 方法一：
-    # 模拟单击输入框，然后输入 ctrl v
+    # 左键点击输入框
     click_left_at_pos(pos, sleep_time=0.1)
-    click_ctrl_v()
+    # 方法一：直接向输入框发送字符
+    for char in list(content):
+        win32api.PostMessage(handle, win32con.WM_CHAR, ord(char), 0)
     time.sleep(0.1)
 
+    # 方法二：先把内容放到粘贴板，然后按 模拟 ctrl v 按键
+    # set_text(content)
+    # click_ctrl_v()
+    # time.sleep(0.1)
+
     #
-    # 方法二：
-    # 右键弹出 粘贴按钮，左键点击 粘贴按钮
+    # 方法三：右键弹出 粘贴按钮，左键点击 粘贴按钮
     # click_right_at_pos(pos)
     # click_left_at_pos(get_paste_pos_from_right_click(pos), sleep_time=0.2)
 
@@ -139,14 +149,14 @@ if __name__ == '__main__':
         exit()
 
     # 将窗口调到前台，激活
-    win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
-    win32gui.SetForegroundWindow(hwnd)
+    # win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
+    # win32gui.SetForegroundWindow(hwnd)
 
     # 屏幕坐标到客户端坐标
     # print(win32gui.ScreenToClient(hwnd, (1206, 744)))
-    right_click = get_right_click_pos(hwnd)
-    print(right_click)
+    # right_click = get_right_click_pos(hwnd)
+    # print(right_click)
 
-    for i in range(0, 2):
-        wechat_send_msg(hwnd, "1")
+    for i in range(0, 1):
+        wechat_send_msg(hwnd, "你\n在")
 

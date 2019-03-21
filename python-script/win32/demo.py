@@ -1,6 +1,7 @@
 import win32gui
 import win32.lib.win32con as win32con
 import win32api
+import win32process
 import win32clipboard
 import time
 
@@ -72,5 +73,6 @@ else:
     win32gui.EnumChildWindows(hwnd, lambda handle, param: param.append(handle), hwndChildList)
     print("所有子句柄:", hwndChildList)
 
+print(hwnd)
 
 
