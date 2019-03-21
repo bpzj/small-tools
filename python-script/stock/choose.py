@@ -5,7 +5,7 @@ pro = ts.pro_api()
 # 获取基本数据，需要数据：上市日期，行业
 data = pro.query('stock_basic', exchange='', list_status='L', fields='ts_code, symbol, name, industry, list_date')
 
-# 上市日期 15年之后
+# 上市日期 在 15年 股灾之后
 filter_year = data.loc[data.list_date >= '20150630']
 # 行业
 
