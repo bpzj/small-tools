@@ -22,10 +22,18 @@ print("%x" %(handle) )
 
 # 搜索子窗口
 # 枚举子窗口
+# EnumChildWindows(hwnd, callback, extra)
+# Enumerates the child windows that belong to the specified parent window
+# Parameters:
+#   hwnd : PyHANDLE         The handle to the window to enumerate.
+#   callback : object       A Python function to be used as the callback.
+#   extra : object          Any python object - this is passed to the callback function as the second param
+#                           (first is the hwnd).
 hwndChildList = []
 win32gui.EnumChildWindows(handle, lambda hwnd, param: param.append(hwnd), hwndChildList)
 
-# FindWindowEx(hwndParent=0, hwndChildAfter=0, lpszClass=None, lpszWindow=None) 父窗口句柄 若不为0，则按照z-index的顺序从hwndChildAfter向后开始搜索子窗体，否则从第一个子窗体开始搜索。 子窗口类名 子窗口标题
+# FindWindowEx(hwndParent=0, hwndChildAfter=0, lpszClass=None, lpszWindow=None)
+# 父窗口句柄 若不为0，则按照z-index的顺序从hwndChildAfter向后开始搜索子窗体，否则从第一个子窗体开始搜索。 子窗口类名 子窗口标题
 subHandle = win32gui.FindWindowEx(handle, 0, "EDIT", None)
 
 # 获得窗口的菜单句柄
