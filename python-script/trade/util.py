@@ -4,6 +4,7 @@ import win32con
 from aip import AipOcr
 import json
 
+
 def cap_img(hwnd=None):
     # 获取句柄窗口的大小信息
     # 可以通过修改该位置实现自定义大小截图
@@ -75,4 +76,4 @@ def ocr_string_from_hwnd(hwnd):
 
 
 if __name__ == '__main__':
-    ocr_string_from_hwnd()
+    print(ocr_string_from_hwnd(0x20730))

@@ -1,3 +1,4 @@
+import json
 import time
 import win32api
 import win32gui
@@ -73,7 +74,7 @@ def get_useful_handle(login_hwnd):
                 handles.update(mode_hwnd=child)
         elif win32gui.GetClassName(child) == "Static":
             if pos_in_window_rect(pos_dic["identify_img"], window_rect):
-                handles.update(idetify_img_hwnd=child)
+                handles.update(identify_img_hwnd=child)
         elif win32gui.GetClassName(child) == "Button":
             if pos_in_window_rect(pos_dic["login_btn_pos"], window_rect):
                 handles.update(login_btn_hwnd=child)
@@ -82,13 +83,19 @@ def get_useful_handle(login_hwnd):
 
 def login(username=None, password=None):
     if username is None or password is None:
-        exit()
+        with open('config.json') as f:
+            data = json.load(f)
+        account = data["account"]
+        if account is None:
+            exit()
+        else:
+            username = account["username"]
+            password = account["password"]
     login_hwnd = win32gui.FindWindow("#32770", "用户登录")
     handles = get_useful_handle(login_hwnd)
-    print(handles)
     win32gui.SendMessage(handles["username_hwnd"], win32con.WM_SETTEXT, None, username)
     win32gui.SendMessage(handles["password_hwnd"], win32con.WM_SETTEXT, None, password)
-    identify_code = ocr_string_from_hwnd(handles["identify_hwnd"])
+    identify_code = ocr_string_from_hwnd(handles["identify_img_hwnd"])
     win32gui.SendMessage(handles["identify_hwnd"], win32con.WM_SETTEXT, None, identify_code)
     win32gui.SendMessage(handles["login_btn_hwnd"], win32con.WM_LBUTTONDOWN, None, None)
     win32gui.SendMessage(handles["login_btn_hwnd"], win32con.WM_LBUTTONUP, None, None)
@@ -96,8 +103,5 @@ def login(username=None, password=None):
 
 if __name__ == '__main__':
     open_login_win()
-    login(username="name", password="pass")
-    # 获取句柄窗口的大小信息
-    # 可以通过修改该位置实现自定义大小截图
-    # hwnd = 658194
+    login()
 

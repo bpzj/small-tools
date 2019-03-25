@@ -91,3 +91,4 @@ screenshot.SaveBitmapFile(mem_dc, 'screenshot.bmp')
 # 内存释放
 mem_dc.DeleteDC()
 win32gui.DeleteObject(screenshot.GetHandle())
+
