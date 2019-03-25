@@ -1,11 +1,9 @@
 import time
 import win32api
 import win32gui
-import win32com
-import win32ui
 
 import win32con
-from util import cap_img
+from util import ocr_string_from_hwnd
 
 
 def open_login_win(exe_path=None):
@@ -90,14 +88,15 @@ def login(username=None, password=None):
     print(handles)
     win32gui.SendMessage(handles["username_hwnd"], win32con.WM_SETTEXT, None, username)
     win32gui.SendMessage(handles["password_hwnd"], win32con.WM_SETTEXT, None, password)
-    win32gui.SendMessage(handles["identify_hwnd"], win32con.WM_SETTEXT, None, "6557")
+    identify_code = ocr_string_from_hwnd(handles["identify_hwnd"])
+    win32gui.SendMessage(handles["identify_hwnd"], win32con.WM_SETTEXT, None, identify_code)
     win32gui.SendMessage(handles["login_btn_hwnd"], win32con.WM_LBUTTONDOWN, None, None)
     win32gui.SendMessage(handles["login_btn_hwnd"], win32con.WM_LBUTTONUP, None, None)
 
 
 if __name__ == '__main__':
     open_login_win()
-    # login(username="name", password="pass")
+    login(username="name", password="pass")
     # 获取句柄窗口的大小信息
     # 可以通过修改该位置实现自定义大小截图
     # hwnd = 658194

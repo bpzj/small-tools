@@ -1,13 +1,10 @@
 import win32gui
 import win32ui
 import win32con
-from ctypes import windll
-from PIL import Image
+from aip import AipOcr
+import json
 
-
-def cap_img(handle=None):
-    hwnd = 0x10A8C
-    hwnd = 0x10AA0
+def cap_img(hwnd=None):
     # 获取句柄窗口的大小信息
     # 可以通过修改该位置实现自定义大小截图
     left, top, right, bot = win32gui.GetWindowRect(hwnd)
@@ -33,31 +30,49 @@ def cap_img(handle=None):
     mem_dc = saveDC
     mem_dc.BitBlt((0, 0), (w, h), img_dc, (0, 0), win32con.SRCCOPY)
     # 将截图保存到文件中
-    saveBitMap.SaveBitmapFile(mem_dc, 'screenshot.bmp')
+    saveBitMap.SaveBitmapFile(mem_dc, 'screen.bmp')
 
     # 改变下行决定是否截图整个窗口，可以自己测试下
     # result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 1)
-    result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 0)
-
+    # result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 0)
     # 获取位图信息
-    bmpinfo = saveBitMap.GetInfo()
-    bmpstr = saveBitMap.GetBitmapBits(True)
+    # bmpinfo = saveBitMap.GetInfo()
+    # bmpstr = saveBitMap.GetBitmapBits(True)
     # 生成图像
-    im = Image.frombuffer('RGB',
-                          (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
-                          bmpstr, 'raw', 'BGRX', 0, 1)
+    # im = Image.frombuffer('RGB',
+    #                       (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
+    #                       bmpstr, 'raw', 'BGRX', 0, 1)
+    # 存储截图
+    # if result == 1:
+        # PrintWindow Succeeded
+        # im.save("test.png")
 
+    #
     # 内存释放
     win32gui.DeleteObject(saveBitMap.GetHandle())
     saveDC.DeleteDC()
     mfcDC.DeleteDC()
     win32gui.ReleaseDC(hwnd, hwndDC)
 
-    # 存储截图
-    if result == 1:
-        # PrintWindow Succeeded
-        im.save("test.png")
+
+def img_to_str(image_path):
+    with open('config.json') as f:
+        data = json.load(f)
+    config = data["baidu-ocr-config"]
+    client = AipOcr(**config)
+
+    with open(image_path, 'rb') as fp:
+        image = fp.read()
+    result = client.basicGeneral(image)
+
+    if 'words_result' in result:
+        return '\n'.join([w['words'] for w in result['words_result']])
+
+
+def ocr_string_from_hwnd(hwnd):
+    cap_img(hwnd)
+    return img_to_str("screen.bmp")
 
 
 if __name__ == '__main__':
-    cap_img()
+    ocr_string_from_hwnd()
