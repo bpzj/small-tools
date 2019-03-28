@@ -15,7 +15,7 @@ filter_year = data.loc[data.list_date >= '20150630']
 stocks = pro.stock_company(exchange='SSE', fields='ts_code, city, main_business')
 stocks = stocks.append(pro.stock_company(exchange='SZSE', fields='ts_code, city, main_business'), ignore_index=True)
 # 过滤城市
-cities = ['北京市', '上海市', '深圳市', '杭州市', '广州市']
+cities = ['北京市', '上海市', '深圳市', '杭州市', '广州市', '南京市']
 filter_city = stocks.loc[stocks.city.isin(cities)]
 
 
