@@ -1,0 +1,31 @@
+
+// 此文件经过 generate 后生成
+//    com.bpzj.plugin.parser.SimpleParser
+//    com.bpzj.plugin.psi.SimpleProperty
+//    com.bpzj.plugin.psi.SimpleTypes
+//    com.bpzj.plugin.psi.SimpleVisitor
+//    com.bpzj.plugin.psi.impl.SimplePropertyImpl
+
+{
+  // 此bnf文件 通过 Generate Parser Code 生成的类
+  parserClass="com.bpzj.plugin.parser.SimpleParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Simple"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.bpzj.plugin.psi"
+  psiImplPackage="com.bpzj.plugin.psi.impl"
+
+  elementTypeHolderClass="com.bpzj.plugin.psi.SimpleTypes"
+  elementTypeClass="com.bpzj.plugin.psi.SimpleElementType"
+  tokenTypeClass="com.bpzj.plugin.psi.SimpleTokenType"
+
+  psiImplUtilClass="com.bpzj.plugin.psi.impl.SimplePsiImplUtil"
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY {methods=[getKey getValue]}

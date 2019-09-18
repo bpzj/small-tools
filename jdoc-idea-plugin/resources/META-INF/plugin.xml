@@ -1,0 +1,35 @@
+<idea-plugin>
+  <id>com.bpzj.plugins.jdoc-plugin</id>
+  <name>JDoc Language</name>
+  <version>1.0</version>
+  <vendor email="bpzj@qq.com" url="http://www.bpzj.com">YourCompany</vendor>
+
+  <description><![CDATA[ 自定义.jdoc文件插件 ]]></description>
+
+  <change-notes><![CDATA[ Add change notes here.
+     <em>most HTML tags may be used</em>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="173.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <fileTypeFactory implementation="com.bpzj.plugin.jdoc.file.JDocFileTypeFactory"/>
+    <lang.parserDefinition language="jdoc" implementationClass="com.bpzj.plugin.SimpleParserDefinition"/>
+    <lang.syntaxHighlighterFactory language="jdoc" implementationClass="com.bpzj.plugin.highlight.SimpleSyntaxHighlighterFactory"/>
+    <colorSettingsPage implementation="com.bpzj.plugin.highlight.SimpleColorSettingsPage"/>
+    <annotator language="JAVA" implementationClass="com.bpzj.plugin.SimpleAnnotator"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>
