@@ -1,6 +1,6 @@
 import os
 import re
-from re import Pattern
+from sre_parse import Pattern
 
 path = r"D:\Android\sdk\platform-tools\adb.exe "
 adb_devices = path + r"devices"
@@ -53,11 +53,11 @@ def tap_x1_y1_x2_y2(x_y_scope):
     exe_out(path + r"shell input tap " + str(x) + " " + str(y))
 
 
-def tap_by_content_regexp(pattern: Pattern, ui_content=None):
+def tap_by_content_regexp(pattern: str, ui_content=None):
     if not ui_content:
         ui_content = current_ui()
 
-    pos_str = re.findall(pattern, ui_content)
+    pos_str = re.findall(re.compile(pattern, re.S), ui_content)
     if pos_str:
         tap_x1_y1_x2_y2(str(pos_str[0]).replace("][", ",").replace("[", "").replace("]", "").split(","))
 
@@ -65,19 +65,4 @@ def tap_by_content_regexp(pattern: Pattern, ui_content=None):
 if __name__ == '__main__':
     link_device()
     exe_out(path)
-    open_app(r"com.eg.android.AlipayGphone/com.eg.android.AlipayGphone.AlipayLogin")
-    tap_by_content_regexp(re.compile(r'''android:id/tabs.*?我的.*?id/tab_description.*?bounds="(\[.*?\])"''', re.S))
-    ui = current_ui()
-    if "积分待领取" in ui:
-        tap_by_content_regexp(re.compile(r'''支付宝会员.*?id/item_left_text.*?bounds="(\[.*?\])"''', re.S), ui)
-    else:
-        print("没有未领取的积分")
-        exit(0)
 
-    ui = current_ui()
-    if "领积分" in ui:
-        tap_by_content_regexp(re.compile(r'''领积分.*?bounds="(\[.*?\])"''', re.S), ui)
-
-    ui = current_ui()
-    if "点击领取" in ui:
-        tap_by_content_regexp(re.compile(r'''点击领取.*?bounds="(\[.*?\])"''', re.S), ui)
