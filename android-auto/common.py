@@ -43,6 +43,10 @@ def current_ui():
     return data
 
 
+def monkey_app(package):
+    print(exe_out(path + r'shell monkey -p ' + package + " 1"))
+
+
 def open_app(activity):
     print(exe_out(path + r'shell am start -n ' + activity))
 
@@ -65,4 +69,3 @@ def tap_by_content_regexp(pattern: str, ui_content=None):
 if __name__ == '__main__':
     link_device()
     exe_out(path)
-
