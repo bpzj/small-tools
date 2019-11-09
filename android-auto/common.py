@@ -35,6 +35,7 @@ def get_device_info(serial=""):
 
 
 def current_ui():
+    None if "adb_pull" in os.listdir("D:\\") else os.mkdir(r"D:\adb_pull")
     exe_out(path + "shell uiautomator dump")
     exe_out(path + r"pull /sdcard/window_dump.xml D:\adb_pull")
     f = open(r"D:\adb_pull\window_dump.xml", "r", encoding='UTF-8')
@@ -49,6 +50,10 @@ def monkey_app(package):
 
 def open_app(activity):
     print(exe_out(path + r'shell am start -n ' + activity))
+
+
+def kill_app(package):
+    print(exe_out(path + r'shell am force-stop ' + package))
 
 
 def tap_x1_y1_x2_y2(x_y_scope):
