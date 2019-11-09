@@ -67,6 +67,7 @@ def tap_by_content_regexp(pattern: str, ui_content=None):
         ui_content = current_ui()
 
     pos_str = re.findall(re.compile(pattern, re.S), ui_content)
+    print(pos_str)
     if pos_str:
         tap_x1_y1_x2_y2(str(pos_str[0]).replace("][", ",").replace("[", "").replace("]", "").split(","))
 
